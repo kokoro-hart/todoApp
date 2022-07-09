@@ -7,7 +7,6 @@ export function escapeSpecialChars(str) {
     .replace(/'/g, "&#039;");
 }
 
-
 /**
  * HTML文字列からHTML要素を作成して返す関数
  * @param {string} html html要素
@@ -15,7 +14,7 @@ export function escapeSpecialChars(str) {
 export function htmlToElement(html) {
   const template = document.createElement('template');
   template.innerHTML = html;
-  return html.content.firstElementChild;
+  return template.content.firstElementChild;
 }
 
 /**
