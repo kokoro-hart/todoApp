@@ -21,18 +21,32 @@ export class App {
       todoItems.forEach(item => {
         // 完了ならchecked属性を付与、未完了ならchecked属性を外す
         const todoItemElement = item.completed
-          ? element`<li><input type="checkbox" class="checkbox" checked>${item.title}</li>`
-          : element`<li><input type="checkbox" class="checkbox">${item.title}</li>`;
+          ? element`
+          <li><input type="checkbox" class="checkbox" checked>
+            <s>${item.title}</s>
+            <button class="delete">x</button>
+          </li>`
+          : element`
+          <li><input type="checkbox" class="checkbox">
+            ${item.title}
+            <button class="delete">x</button>
+          </li>`
+          ;
+        const inputCheckboxElement = todoItemElement.querySelector('.checkbox');
+        inputCheckboxElement.addEventListener('change', () => {
+          this.#todoListModel.updateTodo({
+            id: item.id,
+            completed: !item.completed
+          })
+        })
+        const deleteButtonElement = todoItemElement.querySelector('.delete');
+        deleteButtonElement.addEventListener('click', () => {
+          this.#todoListModel.deleteTodo({
+            id: item.id
+          });
+        });
         todoListElement.appendChild(todoItemElement);
       });
-      const todoItemElement = element`<li><input type="checkbox" class="checkbox">${item.title}</li>`;
-      const inputCheckboxElement = todoItemElement.querySelector('.checkbox');
-      inputCheckboxElement.addEventListener('change', () => {
-        this.#todoListModel.updateTodo({
-          id: item.id,
-          completed: !item.completed
-        })
-      })
       // コンテナ要素の中身をTodoリストをまとめるList要素で上書きする
       render(todoListElement, containerElement);
       // アイテム数の表示を更新
